@@ -1,0 +1,39 @@
+# Python
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+
+venv/
+env/
+
+# Environment Variables
+
+.env
+
+# Flask
+
+instance/
+.webassets-cache
+
+# Exports
+
+exports/
+
+# Docker
+
+*.log
+
+# VS Code
+
+.vscode/
+
+# Mac
+
+.DS_Store
+
+# Windows
+
+Thumbs.db

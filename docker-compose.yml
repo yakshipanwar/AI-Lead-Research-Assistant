@@ -1,0 +1,15 @@
+services:
+
+  ai-lead-assistant:
+
+    build: .
+
+    container_name: ai-lead-assistant
+
+    ports:
+      - "5000:5000"
+
+    env_file:
+      - .env
+
+    restart: unless-stopped

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Lead Research Assistant</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+
+<div class="max-w-7xl mx-auto px-6 py-10">
+
+    <div class="text-center mb-10">
+
+        <h1 class="text-5xl font-bold text-slate-800">
+            AI Lead Research Assistant
+        </h1>
+
+        <p class="mt-4 text-slate-600">
+            Research companies, discover AI opportunities and generate outreach instantly.
+        </p>
+
+    </div>
+
+    <div
+        id="loader"
+        class="hidden bg-blue-100 border border-blue-300 text-blue-700 p-4 rounded-xl mb-6"
+    >
+        Analyzing company...
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+
+        <form method="POST">
+
+            <div class="mb-5">
+
+                <label class="block font-semibold mb-2">
+                    Company Name
+                </label>
+
+                <input
+                    type="text"
+                    name="company_name"
+                    required
+                    placeholder="Tesla"
+                    class="w-full border rounded-lg px-4 py-3"
+                >
+
+            </div>
+
+            <div class="mb-5">
+
+                <label class="block font-semibold mb-2">
+                    Website URL
+                </label>
+
+                <input
+                    type="text"
+                    name="website_url"
+                    required
+                    placeholder="https://www.tesla.com"
+                    class="w-full border rounded-lg px-4 py-3"
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold"
+            >
+                Analyze Company
+            </button>
+
+        </form>
+
+    </div>
+
+    {% if error %}
+
+    <div class="bg-red-100 text-red-700 border border-red-300 p-4 rounded-xl">
+
+        {{ error }}
+
+    </div>
+
+    {% endif %}
+
+    {% if result %}
+
+    <div class="flex justify-end mb-4">
+
+        <a
+            href="/export"
+            class="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg font-semibold"
+        >
+            Export CSV
+        </a>
+
+    </div>
+
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-lg p-8 mb-6">
+
+        <h2 class="text-4xl font-bold">
+            {{ company_name }}
+        </h2>
+
+        <p class="mt-2">
+            AI Lead Analysis Report
+        </p>
+
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 mb-6">
+
+        <div class="bg-white rounded-2xl shadow p-6">
+
+            <h2 class="font-bold text-xl mb-3">
+                Industry
+            </h2>
+
+            <p>
+                {{ result.industry }}
+            </p>
+
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-6">
+
+            <h2 class="font-bold text-xl mb-3">
+                Website
+            </h2>
+
+            <a
+                href="{{ website_url }}"
+                target="_blank"
+                class="text-blue-600 underline break-all"
+            >
+                {{ website_url }}
+            </a>
+
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-6">
+
+            <h2 class="font-bold text-xl mb-3">
+                Lead Score
+            </h2>
+
+            {% if score >= 85 %}
+                {% set score_color = "text-green-600" %}
+            {% elif score >= 70 %}
+                {% set score_color = "text-yellow-500" %}
+            {% else %}
+                {% set score_color = "text-red-500" %}
+            {% endif %}
+
+            <div class="text-5xl font-bold {{ score_color }}">
+                {{ score }}/100
+            </div>
+
+            <div class="w-full bg-gray-200 rounded-full h-4 mt-4">
+
+                <div
+                    class="bg-blue-600 h-4 rounded-full"
+                    style="width: {{ score }}%"
+                ></div>
+
+            </div>
+
+            <p class="mt-4 text-slate-600">
+                {{ reasoning }}
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="bg-white rounded-2xl shadow p-6 mb-6">
+
+        <h2 class="font-bold text-xl mb-3">
+            Company Summary
+        </h2>
+
+        <p>
+            {{ result.company_summary }}
+        </p>
+
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 mb-6">
+
+        <div class="bg-white rounded-2xl shadow p-6">
+
+            <h2 class="font-bold text-xl mb-3">
+                Products & Services
+            </h2>
+
+            <ul class="list-disc ml-5 space-y-2">
+
+                {% for item in result.products_services %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-6">
+
+            <h2 class="font-bold text-xl mb-3">
+                AI Opportunities
+            </h2>
+
+            <ul class="list-disc ml-5 space-y-2">
+
+                {% for item in result.ai_opportunities %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    <div class="bg-white rounded-2xl shadow p-6">
+
+        <h2 class="font-bold text-xl mb-3">
+            Personalized Outreach Email
+        </h2>
+
+        <div class="bg-slate-50 border rounded-xl p-4">
+
+            <pre class="whitespace-pre-wrap font-sans text-sm">{{ result.outreach_email }}</pre>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<script>
+
+document.querySelector("form").addEventListener(
+    "submit",
+    function(){
+
+        document
+            .getElementById("loader")
+            .classList
+            .remove("hidden");
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
