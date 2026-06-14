@@ -1,30 +1,21 @@
 def calculate_lead_score(company_data):
-
     score = 0
-
     industry = company_data.get(
         "industry",
         ""
     ).lower()
-
     summary = company_data.get(
         "company_summary",
         ""
     )
-
     products = company_data.get(
         "products_services",
         []
     )
-
     ai_opportunities = company_data.get(
         "ai_opportunities",
         []
     )
-
-    # ----------------------
-    # Industry Score (20)
-    # ----------------------
 
     tech_keywords = [
         "software",
@@ -44,9 +35,6 @@ def calculate_lead_score(company_data):
     elif industry:
         score += 10
 
-    # ----------------------
-    # Products Score (20)
-    # ----------------------
 
     if len(products) >= 5:
         score += 20
@@ -57,9 +45,6 @@ def calculate_lead_score(company_data):
     elif len(products) >= 1:
         score += 10
 
-    # ----------------------
-    # AI Opportunity Score (30)
-    # ----------------------
 
     if len(ai_opportunities) >= 3:
         score += 30
@@ -70,9 +55,6 @@ def calculate_lead_score(company_data):
     elif len(ai_opportunities) == 1:
         score += 10
 
-    # ----------------------
-    # Company Summary Quality (20)
-    # ----------------------
 
     summary_length = len(summary)
 
